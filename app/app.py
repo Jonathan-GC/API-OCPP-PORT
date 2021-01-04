@@ -1,31 +1,39 @@
-from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
+from flask import Flask
+from flask_sockets import Sockets
+import json
+import logging
 
-app = Flask("__main__")
+app = Flask(__name__)
+sockets = Sockets(app)
 
-#Definicion de la base de datos
-from config.keys import bd_key
-
-bd_name = 'taskPosgres'
-bd_route = 'postgresql://' + bd_key + ':admin@localhost:5433/' + bd_name
-
-app.config['SQLALCHEMY_DATABASE_URI'] = bd_route
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-#pasar la aplicacion al ORM
-db = SQLAlchemy(app)
-ma = Marshmallow(app)
-
-
-db.init_app(app)
-
+HTTP_SERVER_PORT = 5000
 
 @app.route("/")
-def home():
-    return "Activando el webSocket"
+def index():
+    return "Holamundo"
 
+@sockets.route('/media')
+def echo(ws):
+
+    while not ws.closed:
+        message = ws.receive()
+        
+        if message is None:
+            app.logger.info("No message received")
+            continue
+    
+
+        # Messages are a JSON encoded string
+        data = json.loads(message)
+        print(data)
+        ws.send(message)
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    #app.logger.setLevel(logging.DEBUG)
+    from gevent import pywsgi
+    from geventwebsocket.handler import WebSocketHandler
+
+    server = pywsgi.WSGIServer(('', HTTP_SERVER_PORT), app, handler_class=WebSocketHandler)
+    print("Server escuchando en http://localhost:" + str(HTTP_SERVER_PORT))
+    server.serve_forever()
