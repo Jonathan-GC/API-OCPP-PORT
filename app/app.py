@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from central_ocpp.central import *
 
 app = Flask("__main__")
 
@@ -26,6 +27,7 @@ def home():
     return "Activando el webSocket"
 
 
+    
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
