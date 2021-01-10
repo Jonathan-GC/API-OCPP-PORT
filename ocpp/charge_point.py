@@ -301,8 +301,3 @@ class ChargePoint:
     async def _send(self, message):
         LOGGER.info('%s: send %s', self.id, message)
         await self._connection.send(message)
-
-    async def enviar(self, message):
-        print("entro a enviar")
-        LOGGER.info('%s: send %s', self.id, message)
-        await self._connection.send(message)
