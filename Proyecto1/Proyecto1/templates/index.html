@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOLA DJANGO</title>
+</head>
+<body>
+    <h1>Saludo estoy aniquilando mi problema</h1>
+    <h2>Con Django y la ayuda de Dios como Siempre</h2>
+    <p>el nombre que digito es: {{persona}}</p>
+    <h4>temas del dia</h4>
+    <li>{{temas.0}}</li>
+    <li>{{temas.1}}</li>
+    <li>{{temas.2}}</li>
+    <h4>temas del dia pero con bucles</h4>
+    <ul>
+    {% for tema in temas %}
+        <li>{{tema}}</li>
+
+    {% endfor %}
+    </ul>
+</body>
+</html>
