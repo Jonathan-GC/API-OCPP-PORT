@@ -12,8 +12,12 @@ from ocpp.v16 import call_result
 
 logging.basicConfig(level=logging.INFO)
 
-class ChargePoint(cp):
+class ChargePoint(cp, AsyncWebsocketConsumer):
     
+    async def connect(self):
+        await self.accept()
+
+
     #Decorador principal de pedido clientes 
     @on(Action.BootNotification)
     def on_boot_notitication(self, charge_point_vendor: str, charge_point_model: str, **kwargs):
@@ -93,11 +97,11 @@ class ChargePoint(cp):
     def imprimirMenssage(self, connector_id: int, error_code: str, status: str, timestamp: str, info: str, vendor_id: str, vendor_error_code: str):
         print("tomando Pulso del cargador")
 
-async def on_connect(AsyncWebsocketConsumer, path):
-    charge_point_id = path.strip('/')
-    cp = ChargePoint(charge_point_id, AsyncWebsocketConsumer)
-
-    await cp.start()
+#async def on_connect(AsyncWebsocketConsumer, path):
+#    charge_point_id = path.strip('/')
+#    cp = ChargePoint(charge_point_id, AsyncWebsocketConsumer)
+#
+#    await cp.start()
 '''##Esta arte funciona muy bien sin docker
     class ChatConsumer(WebsocketConsumer):
         def connect(self):
