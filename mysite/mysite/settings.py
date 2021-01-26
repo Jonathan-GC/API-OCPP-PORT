@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
-import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'pe6nj8+n$wrutxg*-81e114kb%=2j&oqptcj*(p80b$35h7jiy'
+SECRET_KEY = 'fc6x+7_+02hnhiwrj+v8moj(kh)-=k-xbu3%_h!%yi7n&cp7ro'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'channels',
-    'chat',
+    'app_ocpp',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -69,8 +69,6 @@ TEMPLATES = [
     },
 ]
 
-#WSGI_APPLICATION = 'mysite.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -78,10 +76,7 @@ TEMPLATES = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'TEST': {
-            'NAME': os.path.join(BASE_DIR, 'db_test.sqlite3')
-        }
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -124,8 +119,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+#WSGI_APPLICATION = 'mysite.wsgi.application'
 # Channels
-ASGI_APPLICATION = "mysite.asgi.application"
+ASGI_APPLICATION = 'mysite.asgi.application'
+
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
@@ -133,5 +130,4 @@ CHANNEL_LAYERS = {
             "hosts": [('127.0.0.1', 6379)],
         },
     },
-
 }
