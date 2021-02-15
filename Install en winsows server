@@ -1,0 +1,13 @@
+1) Forzar coimunicacion TLs2
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+2) Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+
+
+3)insert en power shell administrator no X86 
+Install-Module DockerProvider -Force
+
+4) Install-Package Docker -ProviderName DockerProvider -Force
+
+5) probar si funciona 
+docker container run hello-world:nanoserver
