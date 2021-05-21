@@ -49,8 +49,6 @@ Python 3.7.3
 
 See **Deployment** to know how to deploy the project.
 
-***Pendiente***
-
 ### Requirements 📋
 
 * #### Python version
