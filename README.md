@@ -291,7 +291,7 @@ $ python3 manage.py shell
 
 ## License 📄
 
-Except from the documents in docs/v16 this repository is licensing under Apache 2.0 [LICENSE.md](LICENSE.md) para detalles
+Except from the documents in docs/v16 this repository is licensing under Apache 2.0 see [LICENSE.md](LICENSE.md) for more details
 
 
 
