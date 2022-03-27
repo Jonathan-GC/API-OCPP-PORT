@@ -1,0 +1,105 @@
+1)  averiguar la version de Centos
+	
+	$ rpm --query centos-release
+
+2) instalacion de python 3.7
+	$yum install gcc openssl-devel bzip2-devel libffi-devel zlib-devel xz-devel
+	$cd /usr/src  
+	$wget https://www.python.org/ftp/python/3.7.11/Python-3.7.11.tgz
+	$tar xzf Python-3.7.11.tgz
+	$cd Python-3.7.11 
+	$./configure --enable-optimizations 
+	$make altinstall 
+
+	make altinstall is used to prevent replacing the default python binary file /usr/bin/python.
+	$rm /usr/src/Python-3.7.11.tgz
+	$python3.7 -V 
+	
+	debe responder
+	#Python 3.7.11
+
+3) instalacion sqlite3 si arroja problemas por que la version es vieja o simplemente porque no existe, recuerde tener la maquina virtual encendida
+	a. Download the latest package of SQLite3
+		https://www.sqlite.org/download.html
+	copie el vinculo de descarga de la version reciente que desee y luego añada comando wget
+	
+	b.wget https://www.sqlite.org/2021/sqlite-autoconf-3350500.tar.gz
+
+	c. Compile and install
+		$tar xf https://www.sqlite.org/2021/sqlite-autoconf-3350500.tar.gz
+		$cd sqlite-autoconf-3350500
+		$./configure --prefix=/usr/local/ && make && make install 
+
+	d. Change the original SQLite3 command
+	First check which directory SQLite3 has executable files in
+		
+		* (maquinaVirtual)$ whereis sqlite3
+		   #sqlite3: /usr/bin/sqlite3 /usr/local/bin/sqlite3 /usr/include/sqlite3.h /usr/share/man/man1/sqlite3.1.gz
+
+	It is found that/usr/bin/SQLite3 is old, 3.7.17. If you are not sure, just execute it
+	/usr/bin/sqlite3 –verssiocd ..n
+	
+	e. Then replace the old version
+		$mv /usr/bin/sqlite3 /usr/bin/sqlite3_3.7.17
+		$ln -s /usr/local/bin/sqlite3 /usr/bin/sqlite3
+
+	f. Change the library path
+	Many small partners went to the above and tested it. They found that the same error was still reported when executing Python manage.py runserver 8080. The reason is that Django read the old library, and you can verify it yourself
+		____________________________________________________________
+		(maquinaVirtual) [root@george servermonitor]# python 
+		Python 3.6.8 (default, Nov 16 2020, 16:55:22) [GCC 4.8.5 20150623 
+		(Red Hat 4.8.5-44)] on linux Type "help", "copyright", "credits" or "license" for more information.
+		 >>> import sqlite3
+		 > >>> sqlite3.sqlite_version 
+		 > '3.7.17'      
+		>>> exit()
+		____________________________________________________________
+		
+		Modifying library variables
+
+		$export LD_LIBRARY_PATH="/usr/local/lib/"
+	
+	g. Retest
+		____________________________________________________________
+		(maquinaVirtual) [root@george servermonitor]# python 
+		Python 3.6.8 (default, Nov 16 2020, 16:55:22) [GCC 4.8.5 20150623 
+		(Red Hat 4.8.5-44)] on linux Type "help", "copyright", "credits" or "license" for more information.
+		 >>> import sqlite3
+		 > >>> sqlite3.sqlite_version 
+		 > '3.35.5'      
+		>>> exit()
+		____________________________________________________________
+		
+	
+	h. Execution returned to normal
+
+		____________________________________________________________
+		(maquinaVirtual) [root@george servermonitor]# python manage.py runserver 8080
+		 Django version 3.2.4, using settings 'servermonitor.settings' Starting development server at
+		http://127.0.0.1:8080/ Quit the server with CONTROL-C.
+		____________________________________________________________
+
+	j. Para habilitar el servidor vaya a settings.py dentro de la app creada y recuerde habilitar el host en la lita de
+	   ALLOWED_HOST['*']
+
+4) INSTALAR DOCKER	
+	1. Ingresar como rut mediante putty
+	2. Luego, tenemos que instalar una serie de paquetes antes de instalar Docker.
+		$yum install -y yum-utils device-mapper-persistent-data lvm2
+	3. La forma más fácil y segura de completar el proceso es a través de los repositorios oficiales de Docker.
+		$yum-config-manager  --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+	4. Después de esto, podemos instalar Docker en CentOS 7 ejecutando el siguiente comando:
+		$yum install docker-ce
+	5. Ahora sabes cómo instalar Docker en CentOS. ¡Pero todavía no se está ejecutando! Para habilitar e iniciar Docker, ejecuta los siguientes comandos:
+		$systemctl enable docker
+		$systemctl start docker
+	6. Finalmente, puedes verificar el estado del servicio para chequear que todo haya salido bien:
+		$systemctl status docker
+	   
+	Como resultado deberíamos ver una línea verde que indica que Docker está en funcionamiento.
+
+	7. Pruebe que este funcionando con:
+		$docker run hello-world
+
+	8. Verificar todas las imagenes en el sistema
+		$docker images
